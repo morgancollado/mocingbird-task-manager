@@ -37,6 +37,8 @@ gem "thruster", require: false
 
 # state machine gem for task status management
 gem "aasm"
+gem "jwt"
+gem "active_model_serializers", "~> 0.10.0"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -45,6 +47,7 @@ group :development, :test do
   gem "rspec-rails", "~> 5.0"
   gem "factory_bot_rails"
   gem "shoulda-matchers", "~> 5.0"
+  gem "dotenv-rails"
 
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
   gem "brakeman", require: false

@@ -7,4 +7,12 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+
+  post   "/login",  to: "auth#login"
+  delete "/logout", to: "auth#logout"
+
+  resources :users, only: %i[show create update destroy]
+
+  # Task CRUD
+  resources :tasks
 end
