@@ -1,19 +1,16 @@
-# app/controllers/tasks_controller.rb
 class TasksController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_task, only: %i[show update destroy]
 
-  # GET /tasks
+
   def index
-    tasks = current_user.tasks.order(created_at: :desc)
-    render json: tasks, status: :ok
+    render json: current_user.tasks.order(created_at: :desc), status: :ok
   end
 
-  # GET /tasks/:id
   def show
     render json: @task, status: :ok
   end
 
-  # POST /tasks
   def create
     task = current_user.tasks.build(task_params)
     if task.save
@@ -23,12 +20,31 @@ class TasksController < ApplicationController
     end
   end
 
-  # PUT/PATCH /tasks/:id
+  # Applies both non-status attrs and an optional enum status change atomically
   def update
-    if @task.update(task_params)
-      render json: @task, status: :ok
-    else
-      render json: { errors: @task.errors.full_messages }, status: :unprocessable_entity
+    attrs = task_params.to_h
+    new_status = attrs.delete('status')  
+
+    Task.transaction do
+      # 1) Update non‑status attributes if present
+      if attrs.any? && !@task.update(attrs)
+        render json: { errors: @task.errors.full_messages }, status: 422
+        raise ActiveRecord::Rollback
+      end
+
+      # 2) If client provided a status, validate & apply it
+      if new_status.present?
+        unless Task.statuses.key?(new_status)
+          render json: { error: "Invalid status: #{new_status}" }, status: 422
+          raise ActiveRecord::Rollback
+        end
+
+        # Only call bang if it’s actually changing
+        @task.public_send("#{new_status}!") if @task.status != new_status
+      end
+
+      # 3) All good—render the updated task
+      render json: @task, status: 200
     end
   end
 
@@ -41,12 +57,13 @@ class TasksController < ApplicationController
   private
 
   def set_task
-    # Ensures user can only access their own tasks
     @task = current_user.tasks.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    render json: { error: 'Task not found' }, status: :not_found
   end
 
+  # Permit title, description, due_date, and (optional) status
   def task_params
-    # Permit only the fields you want clients to set
     params.require(:task).permit(:title, :description, :due_date, :status)
   end
 end
