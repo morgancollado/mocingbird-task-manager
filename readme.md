@@ -34,6 +34,7 @@ I had initially explored implementing the AASM gem to give tasks a robust state 
 2. AuthController handles /login & /logout
 3. UsersController handles /users (signup + profile + CRUD)
 4. Angular interceptor attaches Authorization: Bearer <token> to every request
+5. I opted for bcrypt and has_secure_password for authentication because it gives us a solid authencation foundation with minimal code. By leveraging rails built in auth convention we have less boiler plate and less dependencies to manage
 
 ## Getting Started
 ### Prereqs
