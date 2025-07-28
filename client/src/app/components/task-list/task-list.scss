@@ -1,0 +1,46 @@
+/* Container card */
+.task-list-container .header {
+  display: flex;
+  align-items: center;      
+  padding-bottom: 0;         
+}
+
+.task-list-container .spacer {
+  flex: 1 1 auto;
+}
+
+/* Grid of task cards */
+.task-grid {
+  display: grid;
+  gap: 1rem;
+  /* 1 column on small, 2 on medium+, 3 on large */
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  margin-top: 1rem;
+}
+
+/* Individual task card */
+.task-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Loading / error / empty states */
+.spinner,
+.error,
+.no-tasks {
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0;
+}
+
+.error {
+  color: #f44336;
+}
+
+/* Footer button */
+.new-btn {
+  margin-top: 1.5rem;
+  display: block;
+  width: 100%;
+}
