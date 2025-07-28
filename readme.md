@@ -36,6 +36,23 @@ I had initially explored implementing the AASM gem to give tasks a robust state 
 4. Angular interceptor attaches Authorization: Bearer <token> to every request
 5. I opted for bcrypt and has_secure_password for authentication because it gives us a solid authencation foundation with minimal code. By leveraging rails built in auth convention we have less boiler plate and less dependencies to manage
 
+### Api Design
+
+I based the API on RESTful principles to keep it predictable and easy to consume:
+
+- Resource‑oriented routing: /users, /login, /tasks with standard HTTP verbs (GET/POST/PATCH/DELETE) makes intent clear.
+- Stateless JWT authentication: using a single Authorization: Bearer <token> header lets the backend remain stateless and scales easily.
+
+#### Clear separation of concerns:
+
+- AuthController handles only login/logout,
+- UsersController handles signup and user CRUD,
+- TasksController handles task CRUD and status transitions.
+
+Partial updates via PATCH /tasks/:id allow both attribute changes and guarded status transitions in one call, reducing round‑trips.
+
+Consistent JSON responses and HTTP status codes (200 OK, 201 Created, 422 Unprocessable Entity, 401 Unauthorized) give the client clear signals for success or error.
+
 ## Getting Started
 ### Prereqs
 
