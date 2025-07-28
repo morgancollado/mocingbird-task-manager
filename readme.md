@@ -24,7 +24,7 @@ enum status: {
   cancelled:   3
 }
 ```
-This keeps the controller logic straight forward while still giving us generated helper methods like `task.pending?`, `task.completed!`, minimal overhead allowing for less code to maintain and understand and still giving us the benefits of callback support and guarded transitions.
+This keeps the controller logic straight forward while still giving us generated helper methods like `task.pending?`, `task.completed!`, minimal overhead allowing for less code to maintain while still giving us the benefits of callback support and guarded transitions.
 
 ### Authentication
 
