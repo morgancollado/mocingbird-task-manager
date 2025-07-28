@@ -26,6 +26,8 @@ enum status: {
 ```
 This keeps the controller logic straight forward while still giving us generated helper methods like `task.pending?`, `task.completed!`, minimal overhead allowing for less code to maintain while still giving us the benefits of callback support and guarded transitions.
 
+I had initially explored implementing the AASM gem to give tasks a robust state engine but decided to opt for enum only due to the complexity that AASM introduces that was not necessary for the scope of this project.
+
 ### Authentication
 
 1. JWT‑based via a custom JsonWebToken helper
